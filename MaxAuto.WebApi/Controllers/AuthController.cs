@@ -1,6 +1,6 @@
 ﻿using MaxAuto.WebApi.Domain.Models.Requests;
 using MaxAuto.WebApi.Domain.Models.Responses;
-using MaxAuto.WebApi.Services;
+using MaxAuto.WebApi.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,8 +10,9 @@ namespace MaxAuto.WebApi.Controllers;
 /// Authentication controller.
 /// </summary>
 /// <param name="userService"><see cref="IUserServices"/>.</param>
+[ApiController]
 [Route("api/")]
-public class AuthController(IUserServices userService) : ControllerBase
+public sealed class AuthController(IUserServices userService) : ControllerBase
 {
     /// <summary>
     /// Registers a new user.

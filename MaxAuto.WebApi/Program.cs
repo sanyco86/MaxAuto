@@ -3,7 +3,10 @@ using MaxAuto.WebApi.Exceptions;
 using MaxAuto.WebApi.Extensions;
 using MaxAuto.WebApi.Infrastructure.Context;
 using MaxAuto.WebApi.Infrastructure.Mapping;
+using MaxAuto.WebApi.Repositories;
+using MaxAuto.WebApi.Repositories.Abstractions;
 using MaxAuto.WebApi.Services;
+using MaxAuto.WebApi.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -72,6 +75,12 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.AddScoped<IUserServices, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
+builder.Services.AddScoped<IPartRepository, PartRepository>();
+builder.Services.AddScoped<IUnitRepository, UnitRepository>();
+builder.Services.AddScoped<IWorkRepository, WorkRepository>();
+builder.Services.AddScoped<IWorkshopRepository, WorkshopRepository>();
 
 // Registering AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);

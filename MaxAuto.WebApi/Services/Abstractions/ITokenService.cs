@@ -1,6 +1,6 @@
 ﻿using MaxAuto.WebApi.Domain.Entities;
 
-namespace MaxAuto.WebApi.Services;
+namespace MaxAuto.WebApi.Services.Abstractions;
 
 /// <summary>
 /// Service interface for generating tokens.

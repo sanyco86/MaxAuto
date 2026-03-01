@@ -1,4 +1,4 @@
-﻿namespace MaxAuto.WebApi.Services;
+﻿namespace MaxAuto.WebApi.Services.Abstractions;
 
 /// <summary>
 /// Service interface to get information about the current user.

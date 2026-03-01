@@ -1,7 +1,7 @@
 ﻿using MaxAuto.WebApi.Domain.Models.Requests;
 using MaxAuto.WebApi.Domain.Models.Responses;
 
-namespace MaxAuto.WebApi.Services;
+namespace MaxAuto.WebApi.Services.Abstractions;
 
 /// <summary>
 /// Service interface for user-related operations.

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using MaxAuto.WebApi.Services.Abstractions;
 
 namespace MaxAuto.WebApi.Services;
 

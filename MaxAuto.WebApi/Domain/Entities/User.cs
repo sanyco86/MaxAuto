@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 namespace MaxAuto.WebApi.Domain.Entities;
 
 /// <summary>
-/// User
+/// User.
 /// </summary>
 public class User : IdentityUser
 {
@@ -23,7 +23,7 @@ public class User : IdentityUser
     public required string LastName { get; set; }
     
     /// <summary>
-    /// Refresh token
+    /// Refresh token.
     /// </summary>
     [MaxLength(256)]
     public string? RefreshToken { get; set; }

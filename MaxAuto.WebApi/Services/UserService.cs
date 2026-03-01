@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using MaxAuto.WebApi.Domain.Models.Requests;
 using MaxAuto.WebApi.Domain.Models.Responses;
+using MaxAuto.WebApi.Services.Abstractions;
 
 namespace MaxAuto.WebApi.Services;
 

@@ -19,5 +19,19 @@ public class MappingProfile : Profile
         CreateMap<User, CurrentUserResponse>();
         CreateMap<UserRegisterRequest, User>();
 
+        CreateMap<Mechanic, MechanicResponse>();
+        CreateMap<MechanicRequest, Mechanic>();
+
+        CreateMap<Part, PartResponse>();
+        CreateMap<PartRequest, Part>();
+
+        CreateMap<Unit, UnitResponse>();
+        CreateMap<UnitRequest, Unit>();
+
+        CreateMap<Work, WorkResponse>();
+        CreateMap<WorkRequest, Work>();
+
+        CreateMap<Workshop, WorkshopResponse>();
+        CreateMap<WorkshopRequest, Workshop>();
     }
 }
