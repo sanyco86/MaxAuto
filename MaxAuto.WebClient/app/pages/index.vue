@@ -5,10 +5,8 @@ import { getPaginationRowModel } from '@tanstack/table-core'
 import type { ServiceAct } from '~/types/service-act'
 
 const UButton = resolveComponent('UButton')
-const UBadge = resolveComponent('UBadge')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
-const toast = useToast()
 const table = useTemplateRef('table')
 
 const columnFilters = ref([{
@@ -41,21 +39,21 @@ const columns: TableColumn<ServiceAct>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name'
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    filterFn: 'equals',
-    cell: ({ row }) => {
-      const color = {
-        completed: 'success' as const,
-        opened: 'warning' as const
-      }[row.original.status]
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
 
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        row.original.status
-      )
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'Name',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+      })
     }
   },
   {
@@ -84,21 +82,6 @@ const columns: TableColumn<ServiceAct>[] = [
     }
   }
 ]
-
-const statusFilter = ref('all')
-
-watch(() => statusFilter.value, (newVal) => {
-  if (!table?.value?.tableApi) return
-
-  const statusColumn = table.value.tableApi.getColumn('status')
-  if (!statusColumn) return
-
-  if (newVal === 'all') {
-    statusColumn.setFilterValue(undefined)
-  } else {
-    statusColumn.setFilterValue(newVal)
-  }
-})
 
 const name = computed({
   get: (): string => {
@@ -139,17 +122,6 @@ const pagination = ref({
         />
 
         <div class="flex flex-wrap items-center gap-1.5">
-          <USelect
-            v-model="statusFilter"
-            :items="[
-              { label: 'All', value: 'all' },
-              { label: 'Opened', value: 'opened' },
-              { label: 'Completed', value: 'completed' }
-            ]"
-            :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
-            placeholder="Filter status"
-            class="min-w-28"
-          />
           <UDropdownMenu
             :items="
               table?.tableApi

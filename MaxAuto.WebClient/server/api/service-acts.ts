@@ -3,18 +3,15 @@ import type { ServiceAct } from "~/types/service-act";
 const serviceActs: ServiceAct[] = [
   {
     id: 1,
-    name: "Антифриз",
-    status: "completed"
+    name: "Антифриз"
   },
   {
     id: 2,
-    name: "Масло моторное",
-    status: "opened"
+    name: "Масло моторное"
   },
   {
     id: 3,
-    name: "Масло трансмиссионное",
-    status: "opened"
+    name: "Масло трансмиссионное"
   }
 ]
 
