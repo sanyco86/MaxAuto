@@ -23,10 +23,10 @@ function getRowItems() {
   return [
     {
       type: 'label',
-      label: 'Actions'
+      label: 'Действия'
     },
     {
-      label: 'View service act details',
+      label: 'Редактировать',
       icon: 'i-lucide-list'
     }
   ]
@@ -35,17 +35,19 @@ function getRowItems() {
 const columns: TableColumn<ServiceAct>[] = [
   {
     accessorKey: 'id',
-    header: 'ID'
+    header: 'ID',
+    meta: { label: 'ID' }
   },
   {
     accessorKey: 'name',
+    meta: { label: 'Название' },
     header: ({ column }) => {
       const isSorted = column.getIsSorted()
 
       return h(UButton, {
         color: 'neutral',
         variant: 'ghost',
-        label: 'Name',
+        label: 'Название',
         icon: isSorted
           ? isSorted === 'asc'
             ? 'i-lucide-arrow-up-narrow-wide'
@@ -58,6 +60,7 @@ const columns: TableColumn<ServiceAct>[] = [
   },
   {
     id: 'actions',
+    meta: { label: 'Действия' },
     cell: () => {
       return h(
         'div',
@@ -101,7 +104,7 @@ const pagination = ref({
 <template>
   <UDashboardPanel id="service-acts">
     <template #header>
-      <UDashboardNavbar title="ServiceActs">
+      <UDashboardNavbar title="Заказ-наряды">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -114,7 +117,7 @@ const pagination = ref({
           v-model="name"
           class="max-w-sm"
           icon="i-lucide-search"
-          placeholder="Filter names..."
+          placeholder="Поиск..."
         />
 
         <div class="flex flex-wrap items-center gap-1.5">
@@ -124,7 +127,7 @@ const pagination = ref({
                 ?.getAllColumns()
                 .filter((column: any) => column.getCanHide())
                 .map((column: any) => ({
-                  label: upperFirst(column.id),
+                  label: upperFirst(column.columnDef.meta?.label ?? column.id),
                   type: 'checkbox' as const,
                   checked: column.getIsVisible(),
                   onUpdateChecked(checked: boolean) {
@@ -138,7 +141,7 @@ const pagination = ref({
             :content="{ align: 'end' }"
           >
             <UButton
-              label="Display"
+              label="Настройки"
               color="neutral"
               variant="outline"
               trailing-icon="i-lucide-settings-2"
@@ -171,8 +174,7 @@ const pagination = ref({
 
       <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
         <div class="text-sm text-muted">
-          {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} of
-          {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} row(s) selected.
+          Показано {{ table?.tableApi?.getFilteredRowModel().rows.length }} из {{ table?.tableApi?.getPreFilteredRowModel().rows.length }} записей
         </div>
 
         <div class="flex items-center gap-1.5">

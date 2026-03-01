@@ -4,10 +4,10 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 
 
 const schema = z.object({
-  firstName: z.string().min(2, 'Too short'),
-  lastName: z.string().min(2, 'Too short'),
-  email: z.email('Invalid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters').optional(),
+  firstName: z.string().min(2, 'Слишком коротко'),
+  lastName: z.string().min(2, 'Слишком коротко'),
+  email: z.email('Невалидный email'),
+  password: z.string().min(6, 'Должен быть не менее 6 символов').optional(),
   position: z.string().optional(),
   role: z.enum(['admin', 'owner', 'manager', 'visitor']),
   workshopId: z.string().optional(),
@@ -29,14 +29,14 @@ const state = reactive<Partial<Schema>>({
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Success', description: `New user ${event.data.email} added`, color: 'success' })
+  toast.add({ title: 'Успех', description: `Пользователь ${event.data.email} успешно создан`, color: 'success' })
   open.value = false
 }
 </script>
 
 <template>
-  <UModal v-model:open="open" title="New user" description="Add a new user to the database">
-    <UButton label="New user" icon="i-lucide-plus" />
+  <UModal v-model:open="open" title="Пользователь" description="Создать нового пользователя">
+    <UButton label="Добавить нового пользователя" icon="i-lucide-plus" />
 
     <template #body>
       <UForm
@@ -45,36 +45,36 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="First Name" placeholder="John" name="firstName">
+        <UFormField label="Имя" name="firstName">
           <UInput v-model="state.firstName" class="w-full" />
         </UFormField>
-        <UFormField label="Last Name" placeholder="Doe" name="lastName">
+        <UFormField label="Фамилия" name="lastName">
           <UInput v-model="state.lastName" class="w-full" />
         </UFormField>
-        <UFormField label="Email" placeholder="john.doe@example.com" name="email">
+        <UFormField label="Email" name="email">
           <UInput v-model="state.email" class="w-full" />
         </UFormField>
-        <UFormField label="Password" placeholder="********" name="password">
+        <UFormField label="Пароль" name="password">
           <UInput v-model="state.password" class="w-full" />
         </UFormField>
-        <UFormField label="position" placeholder="Администратор" name="position">
+        <UFormField label="Должность" name="position">
           <UInput v-model="state.position" class="w-full" />
         </UFormField>
-        <UFormField label="role" placeholder="visitor" name="role">
+        <UFormField label="Роль" name="role">
           <UInput v-model="state.role" class="w-full" />
         </UFormField>
-        <UFormField label="Workshop" placeholder="visitor" name="workshopId">
+        <UFormField label="Сервис" name="workshopId">
           <UInput v-model="state.workshopId" class="w-full" />
         </UFormField>
         <div class="flex justify-end gap-2">
           <UButton
-            label="Cancel"
+            label="Отмена"
             color="neutral"
             variant="subtle"
             @click="open = false"
           />
           <UButton
-            label="Create"
+            label="Создать"
             color="primary"
             variant="solid"
             type="submit"

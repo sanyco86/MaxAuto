@@ -3,8 +3,8 @@ import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = z.object({
-  name: z.string().min(2, 'Too short'),
-  location: z.string().min(2, 'Too short'),
+  name: z.string().min(2, 'Слишком коротко'),
+  location: z.string().min(2, 'Слишком коротко'),
   address: z.string().optional(),
 })
 const open = ref(false)
@@ -19,14 +19,14 @@ const state = reactive<Partial<Schema>>({
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Success', description: `New workshop ${event.data.name} added`, color: 'success' })
+  toast.add({ title: 'Успех', description: `Сервис ${event.data.name} успешно создан`, color: 'success' })
   open.value = false
 }
 </script>
 
 <template>
-  <UModal v-model:open="open" title="New workshop" description="Add a new workshop to the database">
-    <UButton label="New workshop" icon="i-lucide-plus" />
+  <UModal v-model:open="open" title="Сервис" description="Создать новый сервис">
+    <UButton label="Добавить новый сервис" icon="i-lucide-plus" />
 
     <template #body>
       <UForm
@@ -35,24 +35,24 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Name" placeholder="John Doe" name="name">
+        <UFormField label="Название" name="name">
           <UInput v-model="state.name" class="w-full" />
         </UFormField>
-        <UFormField label="Location" placeholder="John Doe" name="location">
+        <UFormField label="Местоположение" name="location">
           <UInput v-model="state.location" class="w-full" />
         </UFormField>
-        <UFormField label="Address" placeholder="John Doe" name="address">
+        <UFormField label="Адрес" name="address">
           <UInput v-model="state.address" class="w-full" />
         </UFormField>
         <div class="flex justify-end gap-2">
           <UButton
-            label="Cancel"
+            label="Отмена"
             color="neutral"
             variant="subtle"
             @click="open = false"
           />
           <UButton
-            label="Create"
+            label="Создать"
             color="primary"
             variant="solid"
             type="submit"

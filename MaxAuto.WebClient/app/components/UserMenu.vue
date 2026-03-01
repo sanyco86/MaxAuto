@@ -23,43 +23,47 @@ const items = computed<DropdownMenuItem[][]>(() => (
     ],
     [
       {
-        label: 'Profile',
-        icon: 'i-lucide-settings'
+        label: 'Профиль',
+        icon: 'i-lucide-settings',
+        to: '/profile'
       }
     ],
     [
       {
-        label: 'Appearance',
+        label: 'Тема',
         icon: 'i-lucide-sun-moon',
-        children: [{
-          label: 'Light',
-          icon: 'i-lucide-sun',
-          type: 'checkbox',
-          checked: colorMode.value === 'light',
-          onSelect(e: Event) {
-            e.preventDefault()
+        children: [
+          {
+            label: 'Светлая',
+            icon: 'i-lucide-sun',
+            type: 'checkbox',
+            checked: colorMode.value === 'light',
+            onSelect(e: Event) {
+              e.preventDefault()
 
-            colorMode.preference = 'light'
-          }
-        }, {
-          label: 'Dark',
-          icon: 'i-lucide-moon',
-          type: 'checkbox',
-          checked: colorMode.value === 'dark',
-          onUpdateChecked(checked: boolean) {
-            if (checked) {
-              colorMode.preference = 'dark'
+              colorMode.preference = 'light'
             }
           },
-          onSelect(e: Event) {
-            e.preventDefault()
+          {
+            label: 'Темная',
+            icon: 'i-lucide-moon',
+            type: 'checkbox',
+            checked: colorMode.value === 'dark',
+            onUpdateChecked(checked: boolean) {
+              if (checked) {
+                colorMode.preference = 'dark'
+              }
+            },
+            onSelect(e: Event) {
+              e.preventDefault()
+            }
           }
-        }]
+        ]
       }
     ],
     [
       {
-        label: 'Log out',
+        label: 'Выйти',
         icon: 'i-lucide-log-out'
       }
     ]

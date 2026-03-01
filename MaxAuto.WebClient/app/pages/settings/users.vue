@@ -20,23 +20,23 @@ function getRowItems() {
   return [
     {
       type: 'label',
-      label: 'Actions'
+      label: 'Действия'
     },
     {
-      label: 'View user details',
+      label: 'Редактировать',
       icon: 'i-lucide-list'
     },
     {
       type: 'separator'
     },
     {
-      label: 'Delete user',
+      label: 'Удалить',
       icon: 'i-lucide-trash',
       color: 'error',
       onSelect() {
         toast.add({
-          title: 'User deleted',
-          description: 'The user has been deleted.'
+          title: 'Удаление',
+          description: 'Пользователь удален.'
         })
       }
     }
@@ -46,11 +46,13 @@ function getRowItems() {
 const columns: TableColumn<User>[] = [
   {
     accessorKey: 'id',
+    meta: { label: 'ID' },
     header: 'ID'
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    meta: { label: 'Имя' },
+    header: 'Имя',
     cell: ({ row }) => {
       return h('div', { class: 'flex items-center gap-3' }, [
         h('div', undefined, [
@@ -62,19 +64,23 @@ const columns: TableColumn<User>[] = [
   },
   {
     accessorKey: 'position',
-    header: 'Position'
+    meta: { label: 'Должность' },
+    header: 'Должность'
   },
   {
     accessorKey: 'location',
-    header: 'Location',
+    meta: { label: 'Сервис' },
+    header: 'Сервис',
     cell: ({ row }) => row.original.workshop?.name
   },
   {
-    accessorKey: 'role',
-    header: 'Role'
+    accessorKey: 'Role',
+    meta: { label: 'Роль' },
+    header: 'Роль'
   },
   {
     id: 'actions',
+    meta: { label: 'Действия' },
     cell: () => {
       return h(
         'div',
@@ -132,7 +138,7 @@ const pagination = ref({
 <template>
   <UDashboardPanel id="users">
     <template #header>
-      <UDashboardNavbar title="Users">
+      <UDashboardNavbar title="Пользователи">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -149,7 +155,7 @@ const pagination = ref({
           v-model="name"
           class="max-w-sm"
           icon="i-lucide-search"
-          placeholder="Filter names..."
+          placeholder="Поиск..."
         />
         <div class="flex flex-wrap items-center gap-1.5">
           <UDropdownMenu
@@ -158,7 +164,7 @@ const pagination = ref({
                 ?.getAllColumns()
                 .filter((column: any) => column.getCanHide())
                 .map((column: any) => ({
-                  label: upperFirst(column.id),
+                  label: upperFirst(column.columnDef.meta?.label ?? column.id),
                   type: 'checkbox' as const,
                   checked: column.getIsVisible(),
                   onUpdateChecked(checked: boolean) {
@@ -172,7 +178,7 @@ const pagination = ref({
             :content="{ align: 'end' }"
           >
             <UButton
-              label="Display"
+              label="Настройки"
               color="neutral"
               variant="outline"
               trailing-icon="i-lucide-settings-2"
@@ -203,8 +209,7 @@ const pagination = ref({
 
       <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
         <div class="text-sm text-muted">
-          {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} of
-          {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} row(s) selected.
+          Показано {{ table?.tableApi?.getFilteredRowModel().rows.length }} из {{ table?.tableApi?.getPreFilteredRowModel().rows.length }} записей
         </div>
 
         <div class="flex items-center gap-1.5">

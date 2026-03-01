@@ -22,23 +22,23 @@ function getRowItems() {
   return [
     {
       type: 'label',
-      label: 'Actions'
+      label: 'Действия'
     },
     {
-      label: 'View unit details',
+      label: 'Редактировать',
       icon: 'i-lucide-list'
     },
     {
       type: 'separator'
     },
     {
-      label: 'Delete unit',
+      label: 'Удалить',
       icon: 'i-lucide-trash',
       color: 'error',
       onSelect() {
         toast.add({
-          title: 'Unit deleted',
-          description: 'The unit has been deleted.'
+          title: 'Удаление',
+          description: 'Единица измерения удалена.'
         })
       }
     }
@@ -58,7 +58,7 @@ const columns: TableColumn<Unit>[] = [
       return h(UButton, {
         color: 'neutral',
         variant: 'ghost',
-        label: 'Name',
+        label: 'Название',
         icon: isSorted
           ? isSorted === 'asc'
             ? 'i-lucide-arrow-up-narrow-wide'
@@ -114,7 +114,7 @@ const pagination = ref({
 <template>
   <UDashboardPanel id="units">
     <template #header>
-      <UDashboardNavbar title="Units">
+      <UDashboardNavbar title="Единицы измерения">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -131,7 +131,7 @@ const pagination = ref({
           v-model="name"
           class="max-w-sm"
           icon="i-lucide-search"
-          placeholder="Filter names..."
+          placeholder="Поиск..."
         />
       </div>
 
@@ -158,8 +158,7 @@ const pagination = ref({
 
       <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
         <div class="text-sm text-muted">
-          {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} of
-          {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} row(s) selected.
+          Показано {{ table?.tableApi?.getFilteredRowModel().rows.length }} из {{ table?.tableApi?.getPreFilteredRowModel().rows.length }} записей
         </div>
 
         <div class="flex items-center gap-1.5">

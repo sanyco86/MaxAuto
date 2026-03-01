@@ -35,12 +35,13 @@ const items = computed<DropdownMenuItem[][]>(() => {
     )),
     [
       {
-        label: 'Create workshop',
+        label: 'Добавить сервис',
         icon: 'i-lucide-circle-plus'
       },
       {
-        label: 'Manage workshops',
-        icon: 'i-lucide-cog'
+        label: 'Управление сервисами',
+        icon: 'i-lucide-cog',
+        to: '/settings/workshops'
       }
     ]
   ]

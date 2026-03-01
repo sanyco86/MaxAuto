@@ -23,23 +23,23 @@ function getRowItems() {
   return [
     {
       type: 'label',
-      label: 'Actions'
+      label: 'Действия'
     },
     {
-      label: 'View workshop details',
+      label: 'Редактировать',
       icon: 'i-lucide-list'
     },
     {
       type: 'separator'
     },
     {
-      label: 'Delete workshop',
+      label: 'Удалить',
       icon: 'i-lucide-trash',
       color: 'error',
       onSelect() {
         toast.add({
-          title: 'Workshop deleted',
-          description: 'The workshop has been deleted.'
+          title: 'Удаление',
+          description: 'Сервис удален.'
         })
       }
     }
@@ -53,15 +53,15 @@ const columns: TableColumn<Workshop>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name'
+    header: 'Зазвание'
   },
   {
     accessorKey: 'location',
-    header: 'Location'
+    header: 'Местоположение'
   },
   {
     accessorKey: 'address',
-    header: 'Address'
+    header: 'Адрес'
   },
   {
     id: 'actions',
@@ -108,7 +108,7 @@ const pagination = ref({
 <template>
   <UDashboardPanel id="workshops">
     <template #header>
-      <UDashboardNavbar title="Workshops">
+      <UDashboardNavbar title="Сервисы">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -125,7 +125,7 @@ const pagination = ref({
           v-model="name"
           class="max-w-sm"
           icon="i-lucide-search"
-          placeholder="Filter names..."
+          placeholder="Поиск.."
         />
       </div>
 
@@ -153,8 +153,7 @@ const pagination = ref({
 
       <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
         <div class="text-sm text-muted">
-          {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} of
-          {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} row(s) selected.
+          Показано {{ table?.tableApi?.getFilteredRowModel().rows.length }} из {{ table?.tableApi?.getPreFilteredRowModel().rows.length }} записей
         </div>
 
         <div class="flex items-center gap-1.5">

@@ -3,7 +3,7 @@ import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = z.object({
-  name: z.string().min(2, 'Too short'),
+  name: z.string().min(2, 'Слишком коротко'),
 })
 const open = ref(false)
 
@@ -15,14 +15,14 @@ const state = reactive<Partial<Schema>>({
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Success', description: `New mechanic ${event.data.name} added`, color: 'success' })
+  toast.add({ title: 'Успех', description: `Новый механик ${event.data.name} успешно добавлен`, color: 'success' })
   open.value = false
 }
 </script>
 
 <template>
-  <UModal v-model:open="open" title="New mechanic" description="Add a new mechanic to the database">
-    <UButton label="New mechanic" icon="i-lucide-plus" />
+  <UModal v-model:open="open" title="Механик" description="Добавить нового механика">
+    <UButton label="Добавить нового механика" icon="i-lucide-plus" />
 
     <template #body>
       <UForm
@@ -31,18 +31,18 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Name" placeholder="John Doe" name="name">
+        <UFormField label="Имя" name="name">
           <UInput v-model="state.name" class="w-full" />
         </UFormField>
         <div class="flex justify-end gap-2">
           <UButton
-            label="Cancel"
+            label="Отмена"
             color="neutral"
             variant="subtle"
             @click="open = false"
           />
           <UButton
-            label="Create"
+            label="Создать"
             color="primary"
             variant="solid"
             type="submit"
