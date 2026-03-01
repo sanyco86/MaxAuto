@@ -9,10 +9,7 @@ const colorMode = useColorMode()
 
 const user = ref({
   name: 'Луцо Михаил',
-  avatar: {
-    src: 'https://github.com/benjamincanac.png',
-    alt: 'Луцо Михаил'
-  }
+  icon: 'i-lucide-user'
 })
 
 const items = computed<DropdownMenuItem[][]>(() => (
@@ -21,13 +18,13 @@ const items = computed<DropdownMenuItem[][]>(() => (
       {
         type: 'label',
         label: user.value.name,
-        avatar: user.value.avatar
+        icon: 'i-lucide-user'
       }
     ],
     [
       {
         label: 'Profile',
-        icon: 'i-lucide-user'
+        icon: 'i-lucide-settings'
       }
     ],
     [

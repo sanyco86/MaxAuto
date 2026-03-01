@@ -30,20 +30,6 @@ function getRowItems() {
     {
       label: 'View service act details',
       icon: 'i-lucide-list'
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Delete service act',
-      icon: 'i-lucide-trash',
-      color: 'error',
-      onSelect() {
-        toast.add({
-          title: 'ServiceAct deleted',
-          description: 'The service act has been deleted.'
-        })
-      }
     }
   ]
 }
@@ -135,10 +121,6 @@ const pagination = ref({
       <UDashboardNavbar title="ServiceActs">
         <template #leading>
           <UDashboardSidebarCollapse />
-        </template>
-
-        <template #right>
-          <ServiceActsAddModal />
         </template>
       </UDashboardNavbar>
     </template>

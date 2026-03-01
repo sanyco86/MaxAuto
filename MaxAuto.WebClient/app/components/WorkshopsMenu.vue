@@ -24,18 +24,26 @@ const workshops = ref([
 const selectedWorkshop = ref(workshops.value[0])
 
 const items = computed<DropdownMenuItem[][]>(() => {
-  return [workshops.value.map(workshop => ({
-    ...workshop,
-    onSelect() {
-      selectedWorkshop.value = workshop
-    }
-  })), [{
-    label: 'Create workshop',
-    icon: 'i-lucide-circle-plus'
-  }, {
-    label: 'Manage workshops',
-    icon: 'i-lucide-cog'
-  }]]
+  return [
+    workshops.value.map(workshop => (
+      {
+        ...workshop,
+        onSelect() {
+          selectedWorkshop.value = workshop
+        }
+      }
+    )),
+    [
+      {
+        label: 'Create workshop',
+        icon: 'i-lucide-circle-plus'
+      },
+      {
+        label: 'Manage workshops',
+        icon: 'i-lucide-cog'
+      }
+    ]
+  ]
 })
 </script>
 
