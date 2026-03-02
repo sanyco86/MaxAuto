@@ -9,7 +9,6 @@ const links = [
       label: 'В работе',
       icon: 'i-lucide-house',
       to: '/',
-      badge: '4',
       onSelect: () => {
         open.value = false
       }
