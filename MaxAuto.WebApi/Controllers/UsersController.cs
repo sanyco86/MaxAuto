@@ -17,4 +17,22 @@ public sealed class UsersController(IUserServices userService) : ControllerBase
         var items = await userService.GetAllAsync(ct);
         return Ok(items);
     }
+
+    [HttpPost]
+    public async Task<ActionResult> Create(CancellationToken ct)
+    {
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult> Update(Guid id, CancellationToken ct)
+    {
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        return NoContent();
+    }
 }

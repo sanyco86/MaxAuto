@@ -2,7 +2,13 @@ import { z } from 'zod'
 import type { User } from '~/types/user'
 
 const BodySchema = z.object({
-  name: z.string().min(2).max(200),
+  firstName: z.string().min(2).max(200),
+  lastName: z.string().min(2).max(200),
+  email: z.email(),
+  password: z.string().min(6).optional(),
+  position: z.string().optional(),
+  role: z.enum(['admin', 'owner', 'manager', 'visitor']),
+  workshopId: z.string().optional(),
 })
 
 export default defineEventHandler(async (event) => {

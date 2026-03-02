@@ -7,7 +7,9 @@ export interface User {
   firstName: string
   lastName: string
   email: string
+  password?: string
   role: UserRoles
   position?: string
   workshop?: Workshop
+  workshopId?: string
 }

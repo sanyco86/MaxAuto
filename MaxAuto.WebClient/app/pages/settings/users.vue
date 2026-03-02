@@ -3,19 +3,26 @@ import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Row } from '@tanstack/table-core'
 import type { User } from '~/types/user'
-import {upperFirst} from "scule";
+import {upperFirst} from "scule"
 
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 const toast = useToast()
 const table = useTemplateRef('table')
+const editOpen = ref(false)
+const editUser = ref<User | null>(null)
 
 const columnVisibility = ref()
 
 const { data, status, refresh } = await useFetch<User[]>('/api/users', { lazy: true })
 
-function onUserCreated() {
+function openEdit(row: Row<User>) {
+  editUser.value = row.original
+  editOpen.value = true
+}
+
+function reloadUsers() {
   refresh()
 }
 
@@ -27,7 +34,10 @@ function getRowItems(row: Row<User>) {
     },
     {
       label: 'Редактировать',
-      icon: 'i-lucide-list'
+      icon: 'i-lucide-list',
+      onSelect() {
+        openEdit(row)
+      }
     },
     {
       type: 'separator'
@@ -40,7 +50,7 @@ function getRowItems(row: Row<User>) {
         if (!confirm('Удалить пользователя?')) return
         await $fetch(`/api/users/${row.original.id}`, { method: 'DELETE' })
         toast.add({ title: 'Удаление', description: 'Пользователь удален.' })
-        await refresh()
+        reloadUsers()
       }
     }
   ]
@@ -142,7 +152,13 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <UsersAddModal @created="onUserCreated" />
+          <UsersAddModal @created="reloadUsers" />
+          <UsersEditModal
+            v-if="editUser"
+            v-model:open="editOpen"
+            :user="editUser"
+            @updated="reloadUsers"
+          />
         </template>
       </UDashboardNavbar>
     </template>

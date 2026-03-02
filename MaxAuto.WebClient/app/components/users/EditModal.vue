@@ -3,9 +3,10 @@ import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { User } from "~/types/user"
 
-const emit = defineEmits<{
-  (e: 'created', unit: User): void
-}>()
+const props = defineProps<{ user: User }>()
+const emit = defineEmits<{ (e: 'updated', user: User): void }>()
+
+const open = defineModel<boolean>('open')
 
 const schema = z.object({
   firstName: z.string().min(2, 'Слишком коротко'),
@@ -19,8 +20,6 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
-const open = ref(false)
-
 const state = reactive<Partial<Schema>>({
   firstName: '',
   lastName: '',
@@ -30,11 +29,28 @@ const state = reactive<Partial<Schema>>({
   role: 'visitor',
   workshopId: ''
 })
+
+watch(
+  [() => open.value, () => props.user],
+  ([isOpen, w]) => {
+    if (!isOpen || !w) return
+
+    state.firstName = w.firstName ?? ''
+    state.lastName = w.lastName ?? ''
+    state.email = w.email ?? ''
+    state.password = w.password ?? ''
+    state.position = w.position ?? ''
+    state.role = w.role ?? 'visitor'
+    state.workshopId = w.workshop?.id ?? ''
+  },
+  { immediate: true }
+)
+
 const toast = useToast()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const user = await $fetch<User>('/api/users', {
-    method: 'POST',
+  const updated = await $fetch<User>(`/api/users/${props.user.id}`, {
+    method: 'PUT',
     body: {
       firstName: event.data.firstName,
       lastName: event.data.lastName,
@@ -42,33 +58,23 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       password: event.data.password,
       position: event.data.position,
       role: event.data.role,
-      workshopId: event.data.workshopId
-    },
+      workshopId: event.data.workshopId,
+    }
   })
 
   toast.add({
     title: 'Успех',
-    description: `Пользователь ${user.email} успешно создан`,
-    color: 'success',
+    description: `Пользователь ${updated.email} успешно обновлен`,
+    color: 'success'
   })
 
+  emit('updated', updated)
   open.value = false
-  state.firstName = ''
-  state.lastName = ''
-  state.email = ''
-  state.password = ''
-  state.position = ''
-  state.role = 'visitor'
-  state.workshopId = ''
-
-  emit('created', user)
 }
 </script>
 
 <template>
-  <UModal v-model:open="open" title="Пользователь" description="Создать нового пользователя">
-    <UButton label="Добавить нового пользователя" icon="i-lucide-plus" />
-
+  <UModal v-model:open="open" title="Пользователь" description="Редактировать пользователя">
     <template #body>
       <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <UFormField label="Имя" name="firstName">
@@ -92,9 +98,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UFormField label="Сервис" name="workshopId">
           <UInput v-model="state.workshopId" class="w-full" />
         </UFormField>
+
         <div class="flex justify-end gap-2">
-          <UButton label="Отмена" color="neutral" variant="subtle" @click="open = false"/>
-          <UButton label="Создать" color="primary" variant="solid" type="submit"/>
+          <UButton label="Отмена" color="neutral" variant="subtle" @click="open = false" />
+          <UButton label="Сохранить" color="primary" variant="solid" type="submit" />
         </div>
       </UForm>
     </template>
