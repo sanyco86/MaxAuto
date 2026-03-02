@@ -9,6 +9,8 @@ const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 const toast = useToast()
 const table = useTemplateRef('table')
+const editOpen = ref(false)
+const editUnit = ref<Unit | null>(null)
 
 const columnFilters = ref([{
   id: 'name',
@@ -17,7 +19,12 @@ const columnFilters = ref([{
 
 const { data, status, refresh } = await useFetch<Unit[]>('/api/units', { lazy: true })
 
-function onUnitCreated() {
+function openEdit(row: Row<Unit>) {
+  editUnit.value = row.original
+  editOpen.value = true
+}
+
+function reloadUnits() {
   refresh()
 }
 
@@ -29,7 +36,10 @@ function getRowItems(row: Row<Unit>) {
     },
     {
       label: 'Редактировать',
-      icon: 'i-lucide-list'
+      icon: 'i-lucide-list',
+      onSelect() {
+        openEdit(row)
+      }
     },
     {
       type: 'separator'
@@ -42,7 +52,7 @@ function getRowItems(row: Row<Unit>) {
         if (!confirm('Удалить единицу измерения?')) return
         await $fetch(`/api/units/${row.original.id}`, { method: 'DELETE' })
         toast.add({ title: 'Удаление', description: 'Единица измерения удалена.' })
-        await refresh()
+        reloadUnits()
       }
     }
   ]
@@ -119,7 +129,13 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <UnitsAddModal @created="onUnitCreated" />
+          <UnitsAddModal @created="reloadUnits" />
+          <UnitsEditModal
+            v-if="editUnit"
+            v-model:open="editOpen"
+            :unit="editUnit"
+            @updated="reloadUnits"
+          />
         </template>
       </UDashboardNavbar>
     </template>

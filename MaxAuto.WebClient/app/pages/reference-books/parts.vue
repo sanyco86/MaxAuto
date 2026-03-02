@@ -9,6 +9,8 @@ const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 const toast = useToast()
 const table = useTemplateRef('table')
+const editOpen = ref(false)
+const editPart = ref<Part | null>(null)
 
 const columnFilters = ref([{
   id: 'name',
@@ -17,7 +19,12 @@ const columnFilters = ref([{
 
 const { data, status, refresh } = await useFetch<Part[]>('/api/parts', { lazy: true })
 
-function onPartCreated() {
+function openEdit(row: Row<Part>) {
+  editPart.value = row.original
+  editOpen.value = true
+}
+
+function reloadParts() {
   refresh()
 }
 
@@ -29,7 +36,10 @@ function getRowItems(row: Row<Part>) {
     },
     {
       label: 'Редактировать',
-      icon: 'i-lucide-list'
+      icon: 'i-lucide-list',
+      onSelect() {
+        openEdit(row)
+      }
     },
     {
       type: 'separator'
@@ -42,7 +52,7 @@ function getRowItems(row: Row<Part>) {
         if (!confirm('Удалить запчасть?')) return
         await $fetch(`/api/parts/${row.original.id}`, { method: 'DELETE' })
         toast.add({ title: 'Удаление', description: 'Запчасть удалена.' })
-        await refresh()
+        reloadParts()
       }
     }
   ]
@@ -119,7 +129,13 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <PartsAddModal @created="onPartCreated" />
+          <PartsAddModal @created="reloadParts" />
+          <PartsEditModal
+            v-if="editPart"
+            v-model:open="editOpen"
+            :part="editPart"
+            @updated="reloadParts"
+          />
         </template>
       </UDashboardNavbar>
     </template>

@@ -1,18 +1,20 @@
+import type { EventHandler } from 'h3'
 import { z } from 'zod'
-import type { Workshop } from "~/types/workshop";
 
 const BodySchema = z.object({
   name: z.string().min(2).max(200),
-  location: z.string().min(2).max(200),
-  address: z.string().max(500).optional().nullable(),
 })
 
-export default defineEventHandler(async (event) => {
+const handler: EventHandler = async (event) => {
   const config = useRuntimeConfig()
+  const { id } = getRouterParams(event)
+
+  if (!id) {
+    throw createError({ statusCode: 400, statusMessage: 'id is required' })
+  }
 
   const body = await readBody(event)
   const parsed = BodySchema.safeParse(body)
-
   if (!parsed.success) {
     throw createError({
       statusCode: 422,
@@ -20,9 +22,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return await $fetch<Workshop>('/api/workshops', {
+  return await $fetch(`/api/service-acts/${id}`, {
     baseURL: config.baseApi,
-    method: 'POST',
+    method: 'PUT',
     body: parsed.data
   })
-})
+}
+
+export default handler

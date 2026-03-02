@@ -9,6 +9,8 @@ const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 const toast = useToast()
 const table = useTemplateRef('table')
+const editOpen = ref(false)
+const editMechanic = ref<Mechanic | null>(null)
 
 const columnFilters = ref([{
   id: 'name',
@@ -17,7 +19,12 @@ const columnFilters = ref([{
 
 const { data, status, refresh } = await useFetch<Mechanic[]>('/api/mechanics', { lazy: true })
 
-function onMechanicCreated() {
+function openEdit(row: Row<Mechanic>) {
+  editMechanic.value = row.original
+  editOpen.value = true
+}
+
+function reloadMechanics() {
   refresh()
 }
 
@@ -29,7 +36,10 @@ function getRowItems(row: Row<Mechanic>) {
     },
     {
       label: 'Редактировать',
-      icon: 'i-lucide-list'
+      icon: 'i-lucide-list',
+      onSelect() {
+        openEdit(row)
+      }
     },
     {
       type: 'separator'
@@ -42,7 +52,7 @@ function getRowItems(row: Row<Mechanic>) {
         if (!confirm('Удалить механика?')) return
         await $fetch(`/api/mechanics/${row.original.id}`, { method: 'DELETE' })
         toast.add({ title: 'Удаление', description: 'Механик удален.' })
-        await refresh()
+        reloadMechanics()
       }
     }
   ]
@@ -119,7 +129,13 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <MechanicsAddModal @created="onMechanicCreated" />
+          <MechanicsAddModal @created="reloadMechanics" />
+          <MechanicsEditModal
+            v-if="editMechanic"
+            v-model:open="editOpen"
+            :mechanic="editMechanic"
+            @updated="reloadMechanics"
+          />
         </template>
       </UDashboardNavbar>
     </template>

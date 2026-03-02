@@ -9,6 +9,8 @@ const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 const toast = useToast()
 const table = useTemplateRef('table')
+const editOpen = ref(false)
+const editWorkshop = ref<Workshop | null>(null)
 
 const columnFilters = ref([{
   id: 'name',
@@ -18,7 +20,12 @@ const columnVisibility = ref()
 
 const { data, status, refresh } = await useFetch<Workshop[]>('/api/workshops', { lazy: true })
 
-function onWorkshopCreated() {
+function openEdit(row: Row<Workshop>) {
+  editWorkshop.value = row.original
+  editOpen.value = true
+}
+
+function reloadWorkshops() {
   refresh()
 }
 
@@ -30,7 +37,10 @@ function getRowItems(row: Row<Workshop>) {
     },
     {
       label: 'Редактировать',
-      icon: 'i-lucide-list'
+      icon: 'i-lucide-list',
+      onSelect() {
+        openEdit(row)
+      }
     },
     {
       type: 'separator'
@@ -113,7 +123,13 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <WorkshopsAddModal @created="onWorkshopCreated" />
+          <WorkshopsAddModal @created="reloadWorkshops" />
+          <WorkshopsEditModal
+            v-if="editWorkshop"
+            v-model:open="editOpen"
+            :workshop="editWorkshop"
+            @updated="reloadWorkshops"
+          />
         </template>
       </UDashboardNavbar>
     </template>

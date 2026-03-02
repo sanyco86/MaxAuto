@@ -9,6 +9,8 @@ const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 const toast = useToast()
 const table = useTemplateRef('table')
+const editOpen = ref(false)
+const editWork = ref<Work | null>(null)
 
 const columnFilters = ref([{
   id: 'name',
@@ -17,7 +19,12 @@ const columnFilters = ref([{
 
 const { data, status, refresh } = await useFetch<Work[]>('/api/works', { lazy: true })
 
-function onWorkCreated() {
+function openEdit(row: Row<Work>) {
+  editWork.value = row.original
+  editOpen.value = true
+}
+
+function reloadWorks() {
   refresh()
 }
 
@@ -29,7 +36,10 @@ function getRowItems(row: Row<Work>) {
     },
     {
       label: 'Редактировать',
-      icon: 'i-lucide-list'
+      icon: 'i-lucide-list',
+      onSelect() {
+        openEdit(row)
+      }
     },
     {
       type: 'separator'
@@ -42,7 +52,7 @@ function getRowItems(row: Row<Work>) {
         if (!confirm('Удалить вид работ?')) return
         await $fetch(`/api/works/${row.original.id}`, { method: 'DELETE' })
         toast.add({ title: 'Удаление', description: 'Вид работ удален.' })
-        await refresh()
+        reloadWorks()
       }
     }
   ]
@@ -119,7 +129,13 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <WorksAddModal @created="onWorkCreated" />
+          <WorksAddModal @created="reloadWorks" />
+          <WorksEditModal
+            v-if="editWork"
+            v-model:open="editOpen"
+            :work="editWork"
+            @updated="reloadWorks"
+          />
         </template>
       </UDashboardNavbar>
     </template>
