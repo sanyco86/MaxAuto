@@ -17,7 +17,6 @@ public class MappingProfile : Profile
     {
         CreateMap<User, UserResponse>();
         CreateMap<User, CurrentUserResponse>();
-        CreateMap<UserRegisterRequest, User>();
 
         CreateMap<Mechanic, MechanicResponse>();
         CreateMap<MechanicRequest, Mechanic>();

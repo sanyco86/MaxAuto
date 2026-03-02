@@ -1,4 +1,4 @@
 export interface Mechanic {
-  id: number
+  id: string
   name: string
 }

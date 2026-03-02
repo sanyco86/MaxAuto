@@ -1,4 +1,4 @@
 export interface Part {
-  id: number
+  id: string
   name: string
 }

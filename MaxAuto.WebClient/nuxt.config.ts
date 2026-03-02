@@ -6,6 +6,10 @@ export default defineNuxtConfig({
     '@vueuse/nuxt'
   ],
 
+  runtimeConfig: {
+    baseApi: ''
+  },
+
   devtools: {
     enabled: true
   },

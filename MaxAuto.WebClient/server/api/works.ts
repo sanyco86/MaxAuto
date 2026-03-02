@@ -1,16 +1,9 @@
 import type { Work } from "~/types/work";
 
-const works: Work[] = [
-  {
-    id: 1,
-    name: "Замена антифриза"
-  },
-  {
-    id: 2,
-    name: "Замена масла"
-  }
-]
+export default defineEventHandler(async () => {
+  const config = useRuntimeConfig()
 
-export default eventHandler(async () => {
-  return works
+  return await $fetch<Work[]>('/api/works', {
+    baseURL: config.baseApi
+  })
 })

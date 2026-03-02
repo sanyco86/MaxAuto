@@ -15,36 +15,16 @@ namespace MaxAuto.WebApi.Controllers;
 public sealed class AuthController(IUserServices userService) : ControllerBase
 {
     /// <summary>
-    /// Registers a new user.
-    /// </summary>
-    /// <param name="request"><see cref="UserRegisterRequest"/>.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
-    [HttpPost("register")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserResponse>> Register([FromBody] UserRegisterRequest request)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        var response = await userService.RegisterAsync(request);
-        return Ok(response);
-    }
-
-    /// <summary>
     /// Logs in a user.
     /// </summary>
     /// <param name="request"><see cref="UserLoginRequest"/>.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
+    /// <returns><see cref="AuthUserResponse"/>.</returns>
     [HttpPost("login")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthUserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserResponse>> Login([FromBody] UserLoginRequest request)
+    public async Task<ActionResult<AuthUserResponse>> Login([FromBody] UserLoginRequest request)
     {
         if (!ModelState.IsValid)
         {
@@ -58,13 +38,13 @@ public sealed class AuthController(IUserServices userService) : ControllerBase
     /// Gets a user by ID.
     /// </summary>
     /// <param name="id">The ID of the user.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
+    /// <returns><see cref="AuthUserResponse"/>.</returns>
     [HttpGet("user/{id:guid}")]
     [Authorize]
-    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthUserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserResponse>> GetById(Guid id)
+    public async Task<ActionResult<AuthUserResponse>> GetById(Guid id)
     {
         if (!ModelState.IsValid)
         {
@@ -137,13 +117,13 @@ public sealed class AuthController(IUserServices userService) : ControllerBase
     /// </summary>
     /// <param name="id">The ID of the user to be updated.</param>
     /// <param name="request"><see cref="UpdateUserRequest"/>.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
+    /// <returns><see cref="AuthUserResponse"/>.</returns>
     [HttpPatch("user/{id:guid}")]
     [Authorize]
-    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthUserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserResponse>> Update(Guid id, [FromBody] UpdateUserRequest request)
+    public async Task<ActionResult<AuthUserResponse>> Update(Guid id, [FromBody] UpdateUserRequest request)
     {
         if (!ModelState.IsValid)
         {

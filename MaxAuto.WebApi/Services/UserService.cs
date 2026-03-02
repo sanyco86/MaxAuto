@@ -21,39 +21,19 @@ namespace MaxAuto.WebApi.Services;
 public class UserService(ITokenService tokenService, ICurrentUserService currentUserService, UserManager<User> userManager, IMapper mapper, ILogger<UserService> logger) : IUserServices
 {
     /// <inheritdoc/>
-    /// <exception cref="Exception">Thrown when the email already exists or user creation fails.</exception>
-    public async Task<UserResponse> RegisterAsync(UserRegisterRequest request)
+    public async Task<List<UserResponse>> GetAllAsync(CancellationToken ct = default)
     {
-        logger.LogInformation("Registering user");
-        var existingUser = await userManager.FindByEmailAsync(request.Email);
-        if (existingUser != null)
-        {
-            logger.LogError("Email already exists");
-            throw new Exception("Email already exists");
-        }
+        logger.LogInformation("Getting all users");
+        var users = await userManager.Users.Include(u => u.Workshop).ToListAsync(ct);
+        var userResponse = mapper.Map<List<UserResponse>>(users);
 
-        var newUser = mapper.Map<User>(request);
-
-        // Generate a unique username
-        newUser.UserName = GenerateUserName(request.FirstName, request.LastName);
-        newUser.CreateAt = DateTime.UtcNow;
-        newUser.UpdateAt = DateTime.UtcNow;
-        var result = await userManager.CreateAsync(newUser, request.Password);
-        if (!result.Succeeded)
-        {
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            logger.LogError("Failed to create user: {Errors}", errors);
-            throw new Exception($"Failed to create user: {errors}");
-        }
-        logger.LogInformation("User created successfully");
-        await tokenService.GenerateToken(newUser);
-        return mapper.Map<UserResponse>(newUser);
+        return userResponse;
     }
 
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException">Thrown when the login request is null.</exception>
     /// <exception cref="Exception">Thrown when the email or password is invalid or user update fails.</exception>
-    public async Task<UserResponse> LoginAsync(UserLoginRequest? request)
+    public async Task<AuthUserResponse> LoginAsync(UserLoginRequest? request)
     {
         if (request == null)
         {
@@ -91,7 +71,7 @@ public class UserService(ITokenService tokenService, ICurrentUserService current
             throw new Exception($"Failed to update user: {errors}");
         }
 
-        var userResponse = mapper.Map<User, UserResponse>(user);
+        var userResponse = mapper.Map<User, AuthUserResponse>(user);
         userResponse.AccessToken = token;
         userResponse.RefreshToken = refreshToken;
 
@@ -100,7 +80,7 @@ public class UserService(ITokenService tokenService, ICurrentUserService current
 
     /// <inheritdoc/>
     /// <exception cref="Exception">Thrown when the user is not found.</exception>
-    public async Task<UserResponse> GetByIdAsync(Guid id)
+    public async Task<AuthUserResponse> GetByIdAsync(Guid id)
     {
         logger.LogInformation("Getting user by id");
         var user = await userManager.FindByIdAsync(id.ToString());
@@ -110,7 +90,7 @@ public class UserService(ITokenService tokenService, ICurrentUserService current
             throw new Exception("User not found");
         }
         logger.LogInformation("User found");
-        return mapper.Map<UserResponse>(user);
+        return mapper.Map<AuthUserResponse>(user);
     }
 
     /// <inheritdoc/>
@@ -218,7 +198,7 @@ public class UserService(ITokenService tokenService, ICurrentUserService current
 
     /// <inheritdoc/>
     /// <exception cref="Exception">Thrown when the user is not found.</exception>
-    public async Task<UserResponse> UpdateAsync(Guid id, UpdateUserRequest request)
+    public async Task<AuthUserResponse> UpdateAsync(Guid id, UpdateUserRequest request)
     {
         var user = await userManager.FindByIdAsync(id.ToString());
         if (user == null)
@@ -233,7 +213,7 @@ public class UserService(ITokenService tokenService, ICurrentUserService current
         user.Email = request.Email;
 
         await userManager.UpdateAsync(user);
-        return mapper.Map<UserResponse>(user);
+        return mapper.Map<AuthUserResponse>(user);
     }
 
     /// <inheritdoc/>

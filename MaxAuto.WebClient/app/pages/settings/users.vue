@@ -74,7 +74,7 @@ const columns: TableColumn<User>[] = [
     cell: ({ row }) => row.original.workshop?.name
   },
   {
-    accessorKey: 'Role',
+    accessorKey: 'role',
     meta: { label: 'Роль' },
     header: 'Роль'
   },

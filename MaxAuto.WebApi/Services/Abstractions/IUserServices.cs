@@ -9,12 +9,11 @@ namespace MaxAuto.WebApi.Services.Abstractions;
 public interface IUserServices
 {
     /// <summary>
-    /// Registers a new user.
+    /// Gets all users.
     /// </summary>
-    /// <param name="request">The user registration request.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
-    Task<UserResponse> RegisterAsync(UserRegisterRequest request);
-    
+    /// <returns>A list of <see cref="UserResponse"/>.</returns>
+    Task<List<UserResponse>> GetAllAsync(CancellationToken ct = default);
+
     /// <summary>
     /// Gets the current user's information.
     /// </summary>
@@ -25,16 +24,16 @@ public interface IUserServices
     /// Gets a user by their ID.
     /// </summary>
     /// <param name="id">The ID of the user.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
-    Task<UserResponse> GetByIdAsync(Guid id);
+    /// <returns><see cref="AuthUserResponse"/>.</returns>
+    Task<AuthUserResponse> GetByIdAsync(Guid id);
     
     /// <summary>
     /// Updates a user's information.
     /// </summary>
     /// <param name="id">The ID of the user to update.</param>
     /// <param name="request">The user update request.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
-    Task<UserResponse> UpdateAsync(Guid id, UpdateUserRequest request);
+    /// <returns><see cref="AuthUserResponse"/>.</returns>
+    Task<AuthUserResponse> UpdateAsync(Guid id, UpdateUserRequest request);
     
     /// <summary>
     /// Deletes a user by their ID.
@@ -61,6 +60,6 @@ public interface IUserServices
     /// Logs in a user.
     /// </summary>
     /// <param name="request">The user login request.</param>
-    /// <returns><see cref="UserResponse"/>.</returns>
-    Task<UserResponse> LoginAsync(UserLoginRequest request);
+    /// <returns><see cref="AuthUserResponse"/>.</returns>
+    Task<AuthUserResponse> LoginAsync(UserLoginRequest request);
 }

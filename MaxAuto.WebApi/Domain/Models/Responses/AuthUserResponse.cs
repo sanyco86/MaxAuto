@@ -1,9 +1,9 @@
 ﻿namespace MaxAuto.WebApi.Domain.Models.Responses;
 
 /// <summary>
-/// User response.
+/// Represents a user response.
 /// </summary>
-public class UserResponse
+public class AuthUserResponse
 {
     /// <summary>
     /// Gets or sets the unique identifier of the user.
@@ -26,17 +26,22 @@ public class UserResponse
     public string Email { get; set; }
     
     /// <summary>
-    /// Gets or sets the role of the user.
+    /// Gets or sets the creation timestamp of the user.
     /// </summary>
-    public string? Role { get; set; }
-
+    public DateTime CreateAt { get; set; }
+    
     /// <summary>
-    /// Gets or sets the position of the user.
+    /// Gets or sets the update timestamp of the user.
     /// </summary>
-    public string? Position { get; set; }
-
+    public DateTime UpdateAt { get; set; }
+    
     /// <summary>
-    /// Gets or sets the workshop of the user.
+    /// Gets or sets the access token for the user.
     /// </summary>
-    public WorkshopResponse? Workshop { get; set; }
+    public string? AccessToken { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the refresh token for the user.
+    /// </summary>
+    public string? RefreshToken { get; set; }
 }

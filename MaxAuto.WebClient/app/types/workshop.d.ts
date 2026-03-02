@@ -1,5 +1,5 @@
 export interface Workshop {
-  id: number
+  id: string
   name: string
   location: string
   address?: string
