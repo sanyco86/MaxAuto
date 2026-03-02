@@ -1,6 +1,4 @@
-import type { EventHandler } from 'h3'
-
-const handler: EventHandler = async (event) => {
+export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const { id } = getRouterParams(event)
 
@@ -12,6 +10,4 @@ const handler: EventHandler = async (event) => {
     baseURL: config.baseApi,
     method: 'DELETE'
   })
-}
-
-export default handler
+})

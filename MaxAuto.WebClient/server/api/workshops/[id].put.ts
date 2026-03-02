@@ -1,4 +1,3 @@
-import type { EventHandler } from 'h3'
 import { z } from 'zod'
 
 const BodySchema = z.object({
@@ -7,7 +6,7 @@ const BodySchema = z.object({
   address: z.string().max(500).optional().nullable(),
 })
 
-const handler: EventHandler = async (event) => {
+export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const { id } = getRouterParams(event)
 
@@ -29,6 +28,4 @@ const handler: EventHandler = async (event) => {
     method: 'PUT',
     body: parsed.data
   })
-}
-
-export default handler
+})
