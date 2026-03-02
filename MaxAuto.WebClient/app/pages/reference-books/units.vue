@@ -47,10 +47,6 @@ function getRowItems() {
 
 const columns: TableColumn<Unit>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID'
-  },
-  {
     accessorKey: 'name',
     header: ({ column }) => {
       const isSorted = column.getIsSorted()

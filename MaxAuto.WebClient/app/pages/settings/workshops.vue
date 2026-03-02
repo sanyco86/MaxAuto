@@ -48,10 +48,6 @@ function getRowItems() {
 
 const columns: TableColumn<Workshop>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID'
-  },
-  {
     accessorKey: 'name',
     header: 'Зазвание'
   },

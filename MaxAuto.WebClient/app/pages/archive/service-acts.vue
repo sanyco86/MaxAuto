@@ -34,11 +34,6 @@ function getRowItems() {
 
 const columns: TableColumn<ServiceAct>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID',
-    meta: { label: 'ID' }
-  },
-  {
     accessorKey: 'name',
     meta: { label: 'Название' },
     header: ({ column }) => {

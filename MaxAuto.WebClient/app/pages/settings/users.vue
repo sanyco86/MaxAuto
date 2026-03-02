@@ -45,11 +45,6 @@ function getRowItems() {
 
 const columns: TableColumn<User>[] = [
   {
-    accessorKey: 'id',
-    meta: { label: 'ID' },
-    header: 'ID'
-  },
-  {
     accessorKey: 'name',
     meta: { label: 'Имя' },
     header: 'Имя',

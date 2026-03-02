@@ -105,7 +105,10 @@ const links = [
       :ui="{ footer: 'lg:border-t lg:border-default' }"
     >
       <template #header="{ collapsed }">
-        <WorkshopsMenu :collapsed="collapsed" />
+        <NuxtLink to="/" class="flex items-end gap-0.5">
+          <Logo class="h-8 w-auto shrink-0" />
+          <span v-if="!collapsed" class="text-xl font-bold text-highlighted">MaxAuto</span>
+        </NuxtLink>
       </template>
 
       <template #default="{ collapsed }">

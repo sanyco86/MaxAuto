@@ -34,11 +34,6 @@ function getRowItems() {
 
 const columns: TableColumn<ServiceAct>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID',
-    meta: { label: 'ID' }
-  },
-  {
     accessorKey: 'name',
     meta: { label: 'Название' },
     header: ({ column }) => {
@@ -104,7 +99,7 @@ const pagination = ref({
 <template>
   <UDashboardPanel id="service-acts">
     <template #header>
-      <UDashboardNavbar title="Заказ-наряды">
+      <UDashboardNavbar title="В работе">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
