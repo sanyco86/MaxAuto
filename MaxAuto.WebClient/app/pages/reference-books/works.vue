@@ -14,9 +14,11 @@ const columnFilters = ref([{
   value: ''
 }])
 
-const { data, status } = await useFetch<Work[]>('/api/works', {
-  lazy: true
-})
+const { data, status, refresh } = await useFetch<Work[]>('/api/works', { lazy: true })
+
+function onWorkCreated() {
+  refresh()
+}
 
 function getRowItems() {
   return [
@@ -116,7 +118,7 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <WorksAddModal />
+          <WorksAddModal @created="onWorkCreated" />
         </template>
       </UDashboardNavbar>
     </template>

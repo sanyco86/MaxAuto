@@ -2,7 +2,6 @@
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
-
 const schema = z.object({
   firstName: z.string().min(2, 'Слишком коротко'),
   lastName: z.string().min(2, 'Слишком коротко'),
@@ -39,12 +38,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <UButton label="Добавить нового пользователя" icon="i-lucide-plus" />
 
     <template #body>
-      <UForm
-        :schema="schema"
-        :state="state"
-        class="space-y-4"
-        @submit="onSubmit"
-      >
+      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <UFormField label="Имя" name="firstName">
           <UInput v-model="state.firstName" class="w-full" />
         </UFormField>
@@ -67,18 +61,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <UInput v-model="state.workshopId" class="w-full" />
         </UFormField>
         <div class="flex justify-end gap-2">
-          <UButton
-            label="Отмена"
-            color="neutral"
-            variant="subtle"
-            @click="open = false"
-          />
-          <UButton
-            label="Создать"
-            color="primary"
-            variant="solid"
-            type="submit"
-          />
+          <UButton label="Отмена" color="neutral" variant="subtle" @click="open = false"/>
+          <UButton label="Создать" color="primary" variant="solid" type="submit"/>
         </div>
       </UForm>
     </template>

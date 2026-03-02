@@ -15,9 +15,7 @@ const columnFilters = ref([{
 }])
 const columnVisibility = ref()
 
-const { data, status } = await useFetch<ServiceAct[]>('/api/service-acts', {
-  lazy: true
-})
+const { data, status } = await useFetch<ServiceAct[]>('/api/service-acts', { lazy: true })
 
 function getRowItems() {
   return [

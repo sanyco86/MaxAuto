@@ -15,9 +15,11 @@ const columnFilters = ref([{
 }])
 const columnVisibility = ref()
 
-const { data, status } = await useFetch<Workshop[]>('/api/workshops', {
-  lazy: true
-})
+const { data, status, refresh } = await useFetch<Workshop[]>('/api/workshops', { lazy: true })
+
+function onWorkshopCreated() {
+  refresh()
+}
 
 function getRowItems() {
   return [
@@ -49,7 +51,7 @@ function getRowItems() {
 const columns: TableColumn<Workshop>[] = [
   {
     accessorKey: 'name',
-    header: 'Зазвание'
+    header: 'Название'
   },
   {
     accessorKey: 'location',
@@ -110,7 +112,7 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <WorkshopsAddModal />
+          <WorkshopsAddModal @created="onWorkshopCreated" />
         </template>
       </UDashboardNavbar>
     </template>

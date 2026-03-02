@@ -14,9 +14,11 @@ const columnFilters = ref([{
   value: ''
 }])
 
-const { data, status } = await useFetch<Unit[]>('/api/units', {
-  lazy: true
-})
+const { data, status, refresh } = await useFetch<Unit[]>('/api/units', { lazy: true })
+
+function onUnitCreated() {
+  refresh()
+}
 
 function getRowItems() {
   return [
@@ -116,7 +118,7 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <UnitsAddModal />
+          <UnitsAddModal @created="onUnitCreated" />
         </template>
       </UDashboardNavbar>
     </template>

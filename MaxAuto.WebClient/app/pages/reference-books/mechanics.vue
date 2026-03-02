@@ -14,9 +14,11 @@ const columnFilters = ref([{
   value: ''
 }])
 
-const { data, status } = await useFetch<Mechanic[]>('/api/mechanics', {
-  lazy: true
-})
+const { data, status, refresh } = await useFetch<Mechanic[]>('/api/mechanics', { lazy: true })
+
+function onMechanicCreated() {
+  refresh()
+}
 
 function getRowItems() {
   return [
@@ -116,7 +118,7 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <MechanicsAddModal />
+          <MechanicsAddModal @created="onMechanicCreated" />
         </template>
       </UDashboardNavbar>
     </template>

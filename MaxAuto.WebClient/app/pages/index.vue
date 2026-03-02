@@ -15,9 +15,11 @@ const columnFilters = ref([{
 }])
 const columnVisibility = ref()
 
-const { data, status } = await useFetch<ServiceAct[]>('/api/service-acts', {
-  lazy: true
-})
+const { data, status, refresh } = await useFetch<ServiceAct[]>('/api/service-acts', { lazy: true })
+
+function onServiceActCreated() {
+  refresh()
+}
 
 function getRowItems() {
   return [
@@ -105,7 +107,7 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <ServiceActsAddModal />
+          <ServiceActsAddModal @created="onServiceActCreated" />
         </template>
       </UDashboardNavbar>
     </template>

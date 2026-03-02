@@ -12,9 +12,11 @@ const table = useTemplateRef('table')
 
 const columnVisibility = ref()
 
-const { data, status } = await useFetch<User[]>('/api/users', {
-  lazy: true
-})
+const { data, status, refresh } = await useFetch<User[]>('/api/users', { lazy: true })
+
+function onUserCreated() {
+  refresh()
+}
 
 function getRowItems() {
   return [
@@ -139,7 +141,7 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <UsersAddModal />
+          <UsersAddModal @created="onUserCreated" />
         </template>
       </UDashboardNavbar>
     </template>

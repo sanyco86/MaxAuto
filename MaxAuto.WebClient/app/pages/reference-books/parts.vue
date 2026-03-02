@@ -14,9 +14,11 @@ const columnFilters = ref([{
   value: ''
 }])
 
-const { data, status } = await useFetch<Part[]>('/api/parts', {
-  lazy: true
-})
+const { data, status, refresh } = await useFetch<Part[]>('/api/parts', { lazy: true })
+
+function onPartCreated() {
+  refresh()
+}
 
 function getRowItems() {
   return [
@@ -116,7 +118,7 @@ const pagination = ref({
         </template>
 
         <template #right>
-          <PartsAddModal />
+          <PartsAddModal @created="onPartCreated" />
         </template>
       </UDashboardNavbar>
     </template>
