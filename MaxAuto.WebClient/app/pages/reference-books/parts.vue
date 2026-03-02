@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
+import type { Row } from '@tanstack/table-core'
 import type { Part } from '~/types/part'
 
 const UButton = resolveComponent('UButton')
@@ -20,7 +21,7 @@ function onPartCreated() {
   refresh()
 }
 
-function getRowItems() {
+function getRowItems(row: Row<Part>) {
   return [
     {
       type: 'label',
@@ -37,11 +38,11 @@ function getRowItems() {
       label: 'Удалить',
       icon: 'i-lucide-trash',
       color: 'error',
-      onSelect() {
-        toast.add({
-          title: 'Удаление',
-          description: 'Запчасть удалена.'
-        })
+      async onSelect() {
+        if (!confirm('Удалить запчасть?')) return
+        await $fetch(`/api/parts/${row.original.id}`, { method: 'DELETE' })
+        toast.add({ title: 'Удаление', description: 'Запчасть удалена.' })
+        await refresh()
       }
     }
   ]
@@ -69,7 +70,7 @@ const columns: TableColumn<Part>[] = [
   },
   {
     id: 'actions',
-    cell: () => {
+    cell: ({ row }) => {
       return h(
         'div',
         { class: 'text-right' },
@@ -79,7 +80,7 @@ const columns: TableColumn<Part>[] = [
             content: {
               align: 'end'
             },
-            items: getRowItems()
+            items: getRowItems(row)
           },
           () =>
             h(UButton, {

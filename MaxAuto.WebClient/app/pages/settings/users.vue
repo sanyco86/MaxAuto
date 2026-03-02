@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
+import type { Row } from '@tanstack/table-core'
 import type { User } from '~/types/user'
 import {upperFirst} from "scule";
 
@@ -18,7 +19,7 @@ function onUserCreated() {
   refresh()
 }
 
-function getRowItems() {
+function getRowItems(row: Row<User>) {
   return [
     {
       type: 'label',
@@ -35,11 +36,11 @@ function getRowItems() {
       label: 'Удалить',
       icon: 'i-lucide-trash',
       color: 'error',
-      onSelect() {
-        toast.add({
-          title: 'Удаление',
-          description: 'Пользователь удален.'
-        })
+      async onSelect() {
+        if (!confirm('Удалить пользователя?')) return
+        await $fetch(`/api/users/${row.original.id}`, { method: 'DELETE' })
+        toast.add({ title: 'Удаление', description: 'Пользователь удален.' })
+        await refresh()
       }
     }
   ]
@@ -78,7 +79,7 @@ const columns: TableColumn<User>[] = [
   {
     id: 'actions',
     meta: { label: 'Действия' },
-    cell: () => {
+    cell: ({ row }) => {
       return h(
         'div',
         { class: 'text-right' },
@@ -88,7 +89,7 @@ const columns: TableColumn<User>[] = [
             content: {
               align: 'end'
             },
-            items: getRowItems()
+            items: getRowItems(row)
           },
           () =>
             h(UButton, {

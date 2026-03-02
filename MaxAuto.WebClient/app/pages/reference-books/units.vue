@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
+import type { Row } from '@tanstack/table-core'
 import type { Unit } from '~/types/unit'
 
 const UButton = resolveComponent('UButton')
@@ -20,7 +21,7 @@ function onUnitCreated() {
   refresh()
 }
 
-function getRowItems() {
+function getRowItems(row: Row<Unit>) {
   return [
     {
       type: 'label',
@@ -37,11 +38,11 @@ function getRowItems() {
       label: 'Удалить',
       icon: 'i-lucide-trash',
       color: 'error',
-      onSelect() {
-        toast.add({
-          title: 'Удаление',
-          description: 'Единица измерения удалена.'
-        })
+      async onSelect() {
+        if (!confirm('Удалить единицу измерения?')) return
+        await $fetch(`/api/units/${row.original.id}`, { method: 'DELETE' })
+        toast.add({ title: 'Удаление', description: 'Единица измерения удалена.' })
+        await refresh()
       }
     }
   ]
@@ -69,7 +70,7 @@ const columns: TableColumn<Unit>[] = [
   },
   {
     id: 'actions',
-    cell: () => {
+    cell: ({ row }) => {
       return h(
         'div',
         { class: 'text-right' },
@@ -79,7 +80,7 @@ const columns: TableColumn<Unit>[] = [
             content: {
               align: 'end'
             },
-            items: getRowItems()
+            items: getRowItems(row)
           },
           () =>
             h(UButton, {
